@@ -1,11 +1,11 @@
 from scapy.all import ARP, Ether, srp
 from argparse import ArgumentParser
 
-#Setting up help menu
-parsser = ArgumentParser(description="Network Scanner using ARP requests")
-parsser.add_argument("-t", "--target", type=str, required=True, help="Target IP address or range")
+# Setting up help menu
+parser = ArgumentParser(description="Network Scanner using ARP requests")
+parser.add_argument("-t", "--target", type=str, required=True, help="Target IP address or range")
 
-args = parsser.parse_args()
+args = parser.parse_args()
 
 # Extracting the target IP from command line arguments
 target_ip = args.target
@@ -13,13 +13,13 @@ target_ip = args.target
 # Creating an ARP request packet
 arp = ARP(pdst=target_ip)
 
-#creating Ethernet broadcast packet
+# Creating Ethernet broadcast packet
 ether = Ether(dst="ff:ff:ff:ff:ff:ff")
-parket = ether/arp
+packet = ether / arp
 
-result = srp(parket, timeout=2, verbose=False)[0]
+result = srp(packet, timeout=2, verbose=False)[0]
 
-# list of clients, each client is a dictionary with IP and MAC
+# List of clients, each client is a dictionary with IP and MAC
 clients = []
 for sent, received in result:
     clients.append({'ip': received.psrc, 'mac': received.hwsrc})
